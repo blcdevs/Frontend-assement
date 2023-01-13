@@ -3,70 +3,78 @@ import axios from "axios";
 import io from "socket.io-client";
 import styles from './Toolbar.module.css'
 import { Button } from "../componentsindex";
+import { useForm } from 'react-hook-form';
+
 const Toolbar = () => {
   const [currencies, setCurrencies] = useState([]);
-  const [currencyFrom, setCurrencyFrom] = useState("");
+  const [totalData, setTotalData] = useState([])
+  const [currencyFrom, setCurrencyFrom] = useState([]);
   const [amount1, setAmount1] = useState(0);
-  const [currencyTo, setCurrencyTo] = useState("");
+  const [currencyToList, setCurrencyToList] = useState([]);
+  const [currencyTo, setCurrencyTo] = useState();
   const [amount2, setAmount2] = useState(0);
 
-  useEffect(() => {
-    const socket = io("http://localhost:3232");
-    socket.on("exchange rate", (data) => {
-      setCurrencyFrom(data.currencyFrom);
-      setAmount1(data.amount1);
-      setCurrencyTo(data.currencyTo);
-      setAmount2(data.amount2);
-    });
-  }, []);
+
+const {saveForm, handleSubmit, watch, formState: { errors } } = useForm();
+const onSubmit = data => console.log(data);
+
 
   const fetchExchangeRates = async () => {
     try {
-      const { data } = await axios.get("http://localhost:3232/exchange-rates");
-      setCurrencies(data.currencies);
-      setCurrencyFrom(data.currencyFrom);
-      setAmount1(data.amount1);
-      setCurrencyTo(data.currencyTo);
-      setAmount2(data.amount2);
+      const {data:{data}}  = await axios.get("http://localhost:3232/exchange-rates");
+      setTotalData(data)
+      setCurrencies(data?.map(item=> item.symbol));
+      setCurrencyToList(data?.map(item=> item.currency));
+      console.log('here is exchange rates =>', data)
     } catch (error) {
       console.error(error);
     }
   };
+
 
   useEffect(() => {
     fetchExchangeRates();
   }, []);
 
-  const handleExchange = async () => {
-    try {
-      const { data } = await axios.post("http://localhost:3232/exchange-rates", {
-        currencyFrom,
-        amount1,
-        currencyTo,
-        amount2,
-      });
-      setCurrencyFrom(data.currencyFrom);
-      setAmount1(data.amount1);
-      setCurrencyTo(data.currencyTo);
-      setAmount2(data.amount2);
-    } catch (error) {
-      console.error(error);
+
+  const onAmountChange = (e)=>{
+    const currentAmount = e.target.value ;
+    console.log(currencyFrom,'currenty to =>', currencyTo)
+    const exchangeRate = totalData.find(item => item.currency == currencyTo && item.rate);
+    if(exchangeRate) {
+        setAmount2(currentAmount*exchangeRate.rate)
+    } else {
+        setAmount2(0)
     }
-  };
+    console.log('here is exchange rate =>', exchangeRate)
+
+}
+
+
 
   return (
     <div className={styles.toolbar_form_container}>
         <div className={styles.toolbar_form_group}>
-            <form className={styles.form}>
+            <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
                 <div className={styles.toolbar_form_input_group}>
                     <label className={styles.label}>
                     Currency From:
                     </label>
-                    <select className={styles.select} onChange={(e) => setCurrencyFrom(e.target.value)}>
-                        {currencies.map((currency, index) => (
-                        <option key={index} value={currency}>{currency}</option>
-                        ))}
+
+                    <select 
+                    className={styles.select} 
+                    onChange={(e) => setCurrencyFrom(e.target.value)} 
+                   
+                    >
+                    <option>select currency</option>
+                      {currencies.map((currency, index) => (
+                      <option key={index} 
+                      value={currency}>
+                        {currency}
+                        </option>
+                      ))}
                     </select>
+
                 </div>
                 <div className={styles.toolbar_form_input_group}>
                     <label className={styles.label}>
@@ -76,7 +84,10 @@ const Toolbar = () => {
                         className={styles.input}
                         type="number"
                         value={amount1}
-                        onChange={(e) => setAmount1(e.target.value)}
+                        onChange={(e) => 
+                          {setAmount1(e.target.value); 
+                          onAmountChange(e)}}  
+                         
                     />  
                 </div>
 
@@ -90,12 +101,21 @@ const Toolbar = () => {
                     <label className={styles.label}>
                     Currency To:
                     </label>
-                    <select className={styles.select} onChange={(e) => setCurrencyTo(e.target.value)}>
-                        {currencies.map((currency, index) => (
-                        <option key={index} value={currency}>{currency}</option>
+                    <select className={styles.select} 
+                    onChange={(e) => setCurrencyTo(e.target.value)} 
+                   
+                    >
+                    <option>select currency</option>
+                        {currencyToList.map((currency, index) => (
+                        <option 
+                        key={index} 
+                        value={currency}>
+                          {currency}
+                        </option>
                         ))}
                     </select>
                </div>
+
                <div className={styles.toolbar_form_input_group}>
                     <label className={styles.label}>
                     Amount 2:
@@ -105,19 +125,19 @@ const Toolbar = () => {
                         className={styles.input}
                         type="number"
                         value={amount2}
-                        onChange={(e) => setAmount2(e.target.value)}
+                        onChange={(e) => setAmount2(e.target.value)} 
+                        
+                        disabled
                     />
                 </div>
 
                 <div className={styles.toolbar_input_button}>
-                    <Button
-                        btnName="Save"
-                        onClick={handleExchange}
-                        classStyles={styles.toolbar_input_btn_style}
-                    />
+                <Button
+                  btnName="Save"
+                  type="submit"
+                  classStyles={styles.toolbar_input_btn_style}
+                 />
                     </div>
-                    
-                {/* <button className={styles.toolbar_form_button} onClick={handleExchange}>Exchange</button> */}
             </form>
         </div>
 
