@@ -61,11 +61,18 @@ const onSubmit = data => console.log(data);
                     Currency From:
                     </label>
 
-                    <select className={styles.select} onChange={(e) => setCurrencyFrom(e.target.value)} {...saveForm("currencyFrom")}>
-                      <option>select currency</option>
-                        {currencies.map((currency, index) => (
-                        <option key={index} value={currency}>{currency}</option>
-                        ))}
+                    <select 
+                    className={styles.select} 
+                    onChange={(e) => setCurrencyFrom(e.target.value)} 
+                   
+                    >
+                    <option>select currency</option>
+                      {currencies.map((currency, index) => (
+                      <option key={index} 
+                      value={currency}>
+                        {currency}
+                        </option>
+                      ))}
                     </select>
 
                 </div>
@@ -77,7 +84,10 @@ const onSubmit = data => console.log(data);
                         className={styles.input}
                         type="number"
                         value={amount1}
-                        onChange={(e) => {setAmount1(e.target.value); onAmountChange(e)}}  {...saveForm("setAmount1")}
+                        onChange={(e) => 
+                          {setAmount1(e.target.value); 
+                          onAmountChange(e)}}  
+                         
                     />  
                 </div>
 
@@ -91,13 +101,21 @@ const onSubmit = data => console.log(data);
                     <label className={styles.label}>
                     Currency To:
                     </label>
-                    <select className={styles.select} onChange={(e) => setCurrencyTo(e.target.value)} {...saveForm("currencyTo")}>
+                    <select className={styles.select} 
+                    onChange={(e) => setCurrencyTo(e.target.value)} 
+                   
+                    >
                     <option>select currency</option>
                         {currencyToList.map((currency, index) => (
-                        <option key={index} value={currency}>{currency}</option>
+                        <option 
+                        key={index} 
+                        value={currency}>
+                          {currency}
+                        </option>
                         ))}
                     </select>
                </div>
+
                <div className={styles.toolbar_form_input_group}>
                     <label className={styles.label}>
                     Amount 2:
@@ -107,7 +125,8 @@ const onSubmit = data => console.log(data);
                         className={styles.input}
                         type="number"
                         value={amount2}
-                        onChange={(e) => setAmount2(e.target.value)} {...saveForm("amount2")}
+                        onChange={(e) => setAmount2(e.target.value)} 
+                        
                         disabled
                     />
                 </div>
