@@ -1,0 +1,16 @@
+.button{
+    justify-content: center;
+    align-items: center;
+    padding: 1px 24px;
+    gap: 10px;
+    
+    width: 120px;
+    height: 40px;
+    
+    background: #49CD5E;
+    border-radius: 8px;  
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+    color: #fff;
+}
