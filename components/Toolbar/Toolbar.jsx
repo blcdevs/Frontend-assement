@@ -1,148 +1,161 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import io from "socket.io-client";
 import styles from './Toolbar.module.css'
-import { Button } from "../componentsindex";
-import { useForm } from 'react-hook-form';
+import { Button, Title } from "../componentsindex";
+import { useForm, Controller } from 'react-hook-form';
+import * as api from '../../api';
+import io from "socket.io-client";
 
-const Toolbar = () => {
-  const [currencies, setCurrencies] = useState([]);
-  const [totalData, setTotalData] = useState([])
-  const [currencyFrom, setCurrencyFrom] = useState([]);
-  const [amount1, setAmount1] = useState(0);
-  const [currencyToList, setCurrencyToList] = useState([]);
-  const [currencyTo, setCurrencyTo] = useState();
-  const [amount2, setAmount2] = useState(0);
+const Toolbar = ({currencies, symbols, exchanges, setLastSave}) => {
+    const [currency, setCurrency] = useState();
+    const [symbol, setSymbol] = useState();
+    const [isSubmitted, setIsSubmitted] = useState(false);
 
 
-const {saveForm, handleSubmit, watch, formState: { errors } } = useForm();
-const onSubmit = data => console.log(data);
+    const {handleSubmit, setValue, control, formState: { errors } } = useForm({
+        defaultValues: {
+            amount: 0,
+            rate: 0,
+        }
+    });
 
+    const onSubmit = async (data) => {
+        await api.saveExchange(data);
+        setLastSave(new Date());
+        setIsSubmitted("Exchange submitted");
+    };
 
-  const fetchExchangeRates = async () => {
-    try {
-      const {data:{data}}  = await axios.get("http://localhost:3232/exchange-rates");
-      setTotalData(data)
-      setCurrencies(data?.map(item=> item.symbol));
-      setCurrencyToList(data?.map(item=> item.currency));
-      console.log('here is exchange rates =>', data)
-    } catch (error) {
-      console.error(error);
+    const calculateRate = (value) => {
+        const {rate} = exchanges.find(item => item.currency === currency && item.symbol === symbol && item.exchangeType === "live");
+        if(!rate) {
+            return;
+        }
+
+        const amount = value * rate;
+        setValue('rate', amount);
     }
-  };
 
-
-  useEffect(() => {
-    fetchExchangeRates();
-  }, []);
-
-
-  const onAmountChange = (e)=>{
-    const currentAmount = e.target.value ;
-    console.log(currencyFrom,'currenty to =>', currencyTo)
-    const exchangeRate = totalData.find(item => item.currency == currencyTo && item.rate);
-    if(exchangeRate) {
-        setAmount2(currentAmount*exchangeRate.rate)
-    } else {
-        setAmount2(0)
-    }
-    console.log('here is exchange rate =>', exchangeRate)
-
-}
-
-
-
-  return (
-    <div className={styles.toolbar_form_container}>
-        <div className={styles.toolbar_form_group}>
-            <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-                <div className={styles.toolbar_form_input_group}>
-                    <label className={styles.label}>
-                    Currency From:
-                    </label>
-
-                    <select 
-                    className={styles.select} 
-                    onChange={(e) => setCurrencyFrom(e.target.value)} 
-                   
-                    >
-                    <option>select currency</option>
-                      {currencies.map((currency, index) => (
-                      <option key={index} 
-                      value={currency}>
-                        {currency}
-                        </option>
-                      ))}
-                    </select>
-
-                </div>
-                <div className={styles.toolbar_form_input_group}>
-                    <label className={styles.label}>
-                    Amount 1:
-                    </label>
-                    <input
-                        className={styles.input}
-                        type="number"
-                        value={amount1}
-                        onChange={(e) => 
-                          {setAmount1(e.target.value); 
-                          onAmountChange(e)}}  
-                         
-                    />  
-                </div>
-
-
-                <div className={styles.toolbar_form_input_group_space_between}>
-                    <span>=</span>
-                </div>
-
-
-                <div className={styles.toolbar_form_input_group}>
-                    <label className={styles.label}>
-                    Currency To:
-                    </label>
-                    <select className={styles.select} 
-                    onChange={(e) => setCurrencyTo(e.target.value)} 
-                   
-                    >
-                    <option>select currency</option>
-                        {currencyToList.map((currency, index) => (
-                        <option 
-                        key={index} 
-                        value={currency}>
-                          {currency}
-                        </option>
-                        ))}
-                    </select>
-               </div>
-
-               <div className={styles.toolbar_form_input_group}>
-                    <label className={styles.label}>
-                    Amount 2:
-                    </label>
-
-                    <input
-                        className={styles.input}
-                        type="number"
-                        value={amount2}
-                        onChange={(e) => setAmount2(e.target.value)} 
-                        
-                        disabled
+    return (
+        <div className={styles.toolbar_form_container}>
+            <div className={styles.toolbar_form_group}>
+                <Title
+                    heading="Exchange"
                     />
-                </div>
-
-                <div className={styles.toolbar_input_button}>
-                <Button
-                  btnName="Save"
-                  type="submit"
-                  classStyles={styles.toolbar_input_btn_style}
-                 />
+                <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
+                    <div className={styles.toolbar_form_input_group}>
+                        <Controller
+                            name="symbol"
+                            control={control}
+                            rules={{ required: true }}
+                            render={({ field }) => (
+                                <>
+                                    <label className={styles.label}>Symbol:</label>
+                                    <select
+                                        className={styles.select}
+                                        {...field}
+                                        onChange={(value) => {
+                                            field.onChange(value);
+                                            setSymbol(value.target.value)
+                                        }}
+                                    >
+                                        <option>Select Symbol</option>
+                                        {
+                                            symbols.map(
+                                                ({label}, index) => (<option key={index} value={label}>{label}</option>)
+                                            )
+                                        }
+                                    </select>
+                                </>
+                            )}
+                        />
                     </div>
-            </form>
+
+                    <div className={styles.toolbar_form_input_group}>
+                        <Controller
+                            name="amount"
+                            control={control}
+                            rules={{ required: true }}
+                            render={({ field }) => (
+                                <>
+                                    <label className={styles.label}>Amount 1:</label>
+                                    <input
+                                        className={styles.input}
+                                        type="number"
+                                        {...field}
+                                        onChange={(value) => {
+                                            field.onChange(value)
+                                            calculateRate(value.target.value)
+                                        }}
+                                    />
+                                </>
+                           )}
+                        />
+                    </div>
+
+                    <div className={styles.toolbar_form_input_group_space_between}>
+                        <span>=</span>
+                    </div>
+
+                    <div className={styles.toolbar_form_input_group}>
+                        <Controller
+                            name="currency"
+                            control={control}
+                            rules={{ required: true }}
+                            render={({ field }) => (
+                                <>
+                                    <label className={styles.label}>Currency:</label>
+                                    <select
+                                        className={styles.select}
+                                        {...field}
+                                        onChange={(value) => {
+                                            field.onChange(value); setCurrency(value.target.value)
+                                        }}
+                                    >
+                                        <option>Select Currency</option>
+                                        {
+                                            currencies.map(
+                                                ({label}, index) => (<option key={index} value={label}>{label}</option>)
+                                            )
+                                        }
+                                    </select>
+                                </>
+                            )}
+                        />
+                    </div>
+
+                    <div className={styles.toolbar_form_input_group}>
+                        <Controller
+                            name="rate"
+                            control={control}
+                            rules={{ required: true }}
+                            render={({ field }) => (
+                                <>
+                                    <label className={styles.label}>Amount 2:</label>
+                                    <input
+                                        className={styles.input}
+                                        type="number"
+                                        {...field}
+                                        readOnly
+                                    />
+                                </>
+                            )}
+                        />
+                    </div>
+
+                    <div className={styles.toolbar_input_button}>
+                        <Button btnName="Save" type="submit" classStyles={styles.toolbar_input_btn_style} />
+                    </div>
+                </form>
+
+                {/* <div className={styles.form_is_success}>
+                {isSubmitted && <label>{isSubmitted}</label>}
+                </div> */}
+
+            </div>
+
         </div>
 
-    </div>
-  );
+        
+    );
 };
 
 export default Toolbar;

@@ -6,7 +6,7 @@
     
     width: 120px;
     height: 40px;
-    
+    border: none;
     background: #49CD5E;
     border-radius: 8px;  
     flex: none;
@@ -14,3 +14,42 @@
     flex-grow: 0;
     color: #fff;
 }
+@media screen and (min-device-width: 280px) and (max-device-width: 425px) {
+.button{
+    justify-content: center;
+    align-items: center;
+    padding: 1px 24px;
+    gap: 10px;
+    
+    width: 80%;
+    height: 40px;
+    border: none;
+    background: #49CD5E;
+    border-radius: 8px;  
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+    color: #fff;
+}
+}
+
+
+@media screen and (min-device-width: 425px) and (max-device-width: 720px) {
+    .button{
+        justify-content: center;
+        align-items: center;
+        padding: 1px 24px;
+        gap: 10px;
+        
+        width: 90%;
+        height: 40px;
+        border: none;
+        background: #49CD5E;
+        border-radius: 8px;  
+        flex: none;
+        order: 2;
+        flex-grow: 0;
+        color: #fff;
+    }
+    }
+    
