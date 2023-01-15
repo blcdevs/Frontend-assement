@@ -3,10 +3,10 @@ import React from "react";
 //INTERNAL IMPORT
 import Style from "./Title.module.css";
 
-const Title = ({ heading, paragraph }) => {
+const Title = ({ heading, paragraph, customTitleStyle }) => {
   return (
     <div className={Style.title}>
-      <div className={Style.title_box}>
+      <div className={`${Style.title_box} ${customTitleStyle}`}>
         <h2>{heading}</h2>
         <p>{paragraph}</p>
       </div>

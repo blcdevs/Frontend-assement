@@ -7,11 +7,11 @@
 }
 
 .table_box {
-  width: 80%;
+  width: 90%;
   border-collapse: collapse;
   margin-top: 20px;
   align-items: center;
-  padding-left: 8rem;
+  padding-left: 2rem;
  
 }
 
@@ -19,8 +19,8 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
   padding: 20px;
+  width: 500px;
 }
 
 .table_box_group {
@@ -29,18 +29,17 @@
   align-items: center;
 }
 
-.table_box_form_field {
-  width: 150px;
+.table_box_form_field,
+.table_box_form_select {
+  width: 100px;
   margin-right: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .table_box_button {
   margin-left: 10px;
-}
-
-.table_box_form_select {
-  width: 150px;
-  margin-right: 10px;
 }
 
 .table_box_table {
@@ -48,39 +47,55 @@
   margin-top: 20px;
 }
 
+.customTitleStyle{
+  text-align: start;
+}
 
-@media screen and (min-device-width: 280px) and (max-device-width: 1180px) {
+
+@media screen and (min-device-width: 280px) and (max-device-width: 667px) {
   .table_container {
-      width: 100%;
-      /* margin: 0 auto; */
+     width: 100%;
       text-align: center;
       background: #FFFFFF;
       box-shadow: 16px 16px 16px 16px rgba(17, 17, 17, 0.06);
-      height: 449px;
+      height: auto;
+    }
+
+    .react-bootstrap-table table {
+      table-layout: auto !important;
     }
     
+    
     .table_box {
-      width: 90%;
+      width: auto;
       border-collapse: collapse;
-      margin-top: 20px;
+      margin-top: 2px;
        align-items: center;
-      padding-left: 2px;
-
+       overflow: auto;
+       overflow-x: scroll;
     }
+    
 
     .table_box_form {
-      flex-direction: column;
-      align-items: flex-start;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 10px;
+      width: 350px;
     }
   
     .table_box_group {
-      flex-direction: column;
+      display: flex;
+  flex-direction: row;
     }
   
     .table_box_form_field,
     .table_box_form_select {
-      width: 200px;
-      margin-right: 0;
+      width: 80px;
+      /* margin-right: 0; */
+      display: flex;
+      flex-direction: row;
+    align-items: flex-start;
     }
   
     .table_box_button {
@@ -90,3 +105,61 @@
     
 }
 
+
+
+@media screen and (min-device-width: 667px) and (max-device-width: 1180px) {
+  .table_container {
+     width: 100%;
+      text-align: center;
+      background: #FFFFFF;
+      box-shadow: 16px 16px 16px 16px rgba(17, 17, 17, 0.06);
+      height: auto;
+
+    }
+
+    .react-bootstrap-table table {
+      table-layout: auto !important;
+    }
+    
+    
+    .table_box {
+      width: 90%;
+      border-collapse: collapse;
+      margin-top: 2px;
+       align-items: flex-start;
+    overflow: auto;
+    overflow-x: scroll;
+
+    }
+    
+
+    .table_box_form {
+      display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 500px;
+    overflow: auto;
+    overflow-x: scroll;
+    }
+  
+  .table_box_group {
+    display: flex;
+    flex-direction: row;
+  }
+  
+    .table_box_form_field,
+    .table_box_form_select {
+      width: 90px;
+      display: flex;
+      flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    }
+  
+    .table_box_button {
+      margin-left: 0;
+      margin-top: 10px;
+    }
+    
+}
