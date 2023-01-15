@@ -25,14 +25,15 @@ const Toolbar = ({currencies, symbols, exchanges, setLastSave}) => {
     };
 
     const calculateRate = (value) => {
-        const {rate} = exchanges.find(item => item.currency === currency && item.symbol === symbol && item.exchangeType === "live");
-        if(!rate) {
+        const exchange = exchanges.find(item => item.currency === currency && item.symbol === symbol && item.exchangeType === "live");
+        if(!exchange || !exchange.rate) {
             return;
         }
-
+        const {rate} = exchange;
         const amount = value * rate;
         setValue('rate', amount);
     }
+    
 
     return (
         <div className={styles.toolbar_form_container}>
