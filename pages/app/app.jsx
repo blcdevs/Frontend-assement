@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import * as api from '../../api';
 import io from "socket.io-client";
-import {TableWidget, Toolbar} from "../../components/componentsindex";
+import {Loader, TableWidget, Toolbar} from "../../components/componentsindex";
 
 const App = () => {
     const [isLoading, setIsLoading] = useState(true);
@@ -35,7 +35,7 @@ const App = () => {
 
     if (isLoading) {
         return (<>
-            <p>Loading</p>
+            <Loader/>
         </>);
     }
 
