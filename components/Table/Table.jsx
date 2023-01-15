@@ -111,7 +111,7 @@ const Table = ({exchanges}) => {
 
               <Form.Control as="select" value={filterType} onChange={(event) => setFilterType(event.target.value)} className={Style.table_box_form_field}>
                 
-                <option value="">All</option>
+                <option value="">Select Type</option>
                 <option value="Live Price">Live Price</option>
                 <option value="Exchange">Exchange</option>
               </Form.Control>
