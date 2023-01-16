@@ -9,6 +9,7 @@ const App = () => {
     const [currencies, setCurrencies] = useState([]);
     const [symbols, setSymbols] = useState([])
     const [exchanges, setExchanges] = useState([])
+    const [isSubmitted, setIsSubmitted] = useState(false);
 
     const [lastSave, setLastSave] = useState([])
 
@@ -27,6 +28,8 @@ const App = () => {
         setCurrencies(_currencies.data);
         setExchanges(_exchanges.data);
         setIsLoading(false);
+        setIsSubmitted("Exchange added to the table at first column");
+        setTimeout(()=>{ setIsSubmitted(false) },6000)
     };
 
     useEffect(() => {
@@ -47,7 +50,11 @@ const App = () => {
                 exchanges={exchanges}
                 setLastSave={setLastSave}
             />
-            <TableWidget exchanges={exchanges}/>
+            <TableWidget 
+            exchanges={exchanges}
+            isSubmitted={isSubmitted}
+
+            />
         </>
     );
 };

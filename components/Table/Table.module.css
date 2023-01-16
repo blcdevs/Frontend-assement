@@ -51,6 +51,21 @@
   text-align: start;
 }
 
+.form_is_success {
+  background-color: #49CD5E;
+  color: #ffffff;
+  height: 48px;
+  display: flex;
+  width: 100%;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-items: center;
+    }
+
+.form_is_success label{
+  padding-top: 10px;
+}
+
 
 @media screen and (min-device-width: 280px) and (max-device-width: 667px) {
   .table_container {
@@ -64,8 +79,7 @@
     .react-bootstrap-table table {
       table-layout: auto !important;
     }
-    
-    
+      
     .table_box {
       width: auto;
       border-collapse: collapse;
@@ -89,25 +103,47 @@
   flex-direction: row;
     }
   
-    .table_box_form_field,
-    .table_box_form_select {
-      width: 65px;
-      /* margin-right: 0; */
+    .table_box_form_field{
+      width: 100px;
       display: flex;
       flex-direction: row;
     align-items: flex-start;
     }
+
+    .table_box_form_select {
+     display: none !important;
+    }
   
-    .table_box_button {
+    .toolbar_input_button {
       margin-left: 0;
-      margin-top: 10px;
+      margin-top: 30px;
+      /* width: 120px; */
+    }
+
+    .toolbar_input_btn_style{
+      width: 120px;
+
+    }
+
+    .form_is_success{
+      background-color: #49CD5E;
+      color: #ffffff;
+      flex-direction: column;
+    width: 100%;
+    height: auto;
+    gap: 10px;
+    
+    }
+  
+    .form_is_success label{
+      padding-top: 10px;
     }
     
 }
 
 
 
-@media screen and (min-device-width: 667px) and (max-device-width: 1180px) {
+@media screen and (min-device-width: 667px) and (max-device-width: 1280px) {
   .table_container {
      width: 100%;
       text-align: center;
@@ -148,18 +184,34 @@
     flex-direction: row;
   }
   
-    .table_box_form_field,
-    .table_box_form_select {
+    .table_box_form_field{
       width: 90px;
       display: flex;
       flex-direction: row;
     align-items: flex-start;
     justify-content: space-between;
     }
+
+    .table_box_form_select {
+     display: none !important;
+    }
   
     .table_box_button {
       margin-left: 0;
       margin-top: 10px;
+    }
+
+    .form_is_success{
+      background-color: #49CD5E;
+      color: #ffffff;
+      flex-direction: column;
+      width: 100%;
+      height: auto;
+    
+    }
+  
+    .form_is_success label{
+      padding-top: 10px;
     }
     
 }
