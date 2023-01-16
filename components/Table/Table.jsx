@@ -2,7 +2,7 @@
 import { useState } from "react";
 import Style from "./Table.module.css"
 import paginationFactory from "react-bootstrap-table2-paginator";
-import filterFactory, { textFilter } from 'react-bootstrap-table2-filter';
+import filterFactory, { textFilter, dateFilter } from 'react-bootstrap-table2-filter';
 
 import "bootstrap/dist/css/bootstrap.min.css"
 import { Title, Button } from '../componentsindex';
@@ -11,18 +11,15 @@ import { Form } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-const Table = ({exchanges}) => {
+const Table = ({exchanges, isSubmitted}) => {
   const [filterType, setFilterType] = useState('');
   const [fromDate, setFromDate] = useState(new Date());
   const [toDate, setToDate] = useState(new Date());
-  const [filteredData, setFilteredData] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-
   // Update the current page when the user clicks on a page number
   const handlePageChange = (page) => {
     setCurrentPage(page);
   }
-
   // Use the paginationFactory function to create a pagination component
   const pagination = paginationFactory({
     page: currentPage,
@@ -31,6 +28,7 @@ const Table = ({exchanges}) => {
 
   const columns = [
     {
+      // filter: dateFilter({ fromDate: fromDate, toDate: toDate }),
       dataField: "dateTime",
       text: "Date",
       sort: true,
@@ -63,25 +61,35 @@ const Table = ({exchanges}) => {
     {
       dataField: "exchangeType",
       text: "Type",
-      // filter: textFilter(), 
+      filter: textFilter(), 
     },
   ];
 
-  const handleClick = () => {
-    setFilteredData(exchanges.filter((row) => {
-      // Convert the date string to a Date object
-      const rowDate = new Date(row.date);
-      // Check if the type and date of the row match the selected filters
-      return (!filterType || row.type === filterType) && (!fromDate || rowDate >= fromDate) && (!toDate || rowDate <= toDate);
-    }));
-  }
+let filteredData = exchanges;
+if (fromDate && toDate) {
+  filteredData = filteredData.filter(exchange => {
+    const date = new Date(exchange.dateTime);
+    return date >= fromDate && date <= toDate;
+  });
+}
 
-    const filteredDataArray = exchanges.filter((row) => {
-      // Convert the date string to a Date object
-      const rowDate = new Date(row.date);
-      // Check if the date falls within the selected range
-      return (!filterType || row.type === filterType) && (!fromDate || rowDate >= fromDate) && (!toDate || rowDate <= toDate);
-    });
+if (filterType) {
+  filteredData = filteredData.filter(exchange => exchange.exchangeType === filterType);
+}
+
+// let filteredData = exchanges;
+// const handleClick = () => {
+//   if (fromDate && toDate) {
+//    filteredData = filteredData.filter(exchange => {
+//        const date = new Date(exchange.dateTime);
+//        return date >= fromDate && date <= toDate;
+//    });
+//   }
+
+//   if (filterType) {
+//    filteredData = filteredData.filter(exchange => exchange.exchangeType === filterType);
+//   }
+//   }
 
   return (
     <div className={Style.table_container}>
@@ -107,19 +115,17 @@ const Table = ({exchanges}) => {
                 <Form.Label>To date</Form.Label>
                 <DatePicker selected={toDate} onChange={setToDate} className={Style.table_box_form_field} />
               </Form.Group>
-
-
-              <Form.Control as="select" value={filterType} onChange={(event) => setFilterType(event.target.value)} className={Style.table_box_form_field}>
+              <Form.Control as="select" onChange={(e) => setFilterType(e.target.value)} className={Style.table_box_form_select}>
                 
                 <option value="">Select Type</option>
-                <option value="Live Price">Live Price</option>
-                <option value="Exchange">Exchange</option>
+                <option value="live">Live Price</option>
+                <option value="exchange">Exchange</option>
               </Form.Control>
 
               <div className={Style.toolbar_input_button}>
                 <Button
                   btnName="Filter"
-                  handleClick={() => handleClick()}
+                  // onClick={handleClick}
                   classStyle={Style.toolbar_input_btn_style}
                 />
               </div>
@@ -131,10 +137,9 @@ const Table = ({exchanges}) => {
 
         <BootstrapTable
           keyField='date'
-          data={exchanges}
+          data={filteredData}
           columns={columns}
           pagination={pagination}
-          filteredData={filteredDataArray}
           pageSize={8}
           striped
           hover
@@ -144,6 +149,13 @@ const Table = ({exchanges}) => {
           className={Style.react_bootstrap_table}
         />
 
+            {isSubmitted &&  
+              <div className={Style.form_is_success}>
+                  <label >
+                    {isSubmitted}
+                  </label>
+              </div>
+              }     
       </div>
     </div>
   );

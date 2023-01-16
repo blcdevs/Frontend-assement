@@ -21,7 +21,8 @@ const Toolbar = ({currencies, symbols, exchanges, setLastSave}) => {
     const onSubmit = async (data) => {
         await api.saveExchange(data);
         setLastSave(new Date());
-        setIsSubmitted("Exchange submitted");
+        setIsSubmitted("Exchange submitted successfully");
+        setTimeout(()=>{ setIsSubmitted(false) },6000)
     };
 
     const calculateRate = (value) => {
@@ -147,9 +148,13 @@ const Toolbar = ({currencies, symbols, exchanges, setLastSave}) => {
                     </div>
                 </form>
 
-                {/* <div className={styles.form_is_success}>
-                {isSubmitted && <label>{isSubmitted}</label>}
-                </div> */}
+                {isSubmitted &&  
+                <div className={styles.form_is_success}>
+                    <label >
+                      {isSubmitted}
+                    </label>
+                </div>
+              }
 
             </div>
 
