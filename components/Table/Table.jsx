@@ -15,7 +15,11 @@ const Table = ({exchanges, isSubmitted}) => {
   const [filterType, setFilterType] = useState('');
   const [fromDate, setFromDate] = useState(new Date());
   const [toDate, setToDate] = useState(new Date());
+  const [filteredData, setFilteredData] = useState(exchanges);
+
   const [currentPage, setCurrentPage] = useState(1);
+
+
   // Update the current page when the user clicks on a page number
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -65,31 +69,32 @@ const Table = ({exchanges, isSubmitted}) => {
     },
   ];
 
-let filteredData = exchanges;
-if (fromDate && toDate) {
-  filteredData = filteredData.filter(exchange => {
-    const date = new Date(exchange.dateTime);
-    return date >= fromDate && date <= toDate;
-  });
-}
-
-if (filterType) {
-  filteredData = filteredData.filter(exchange => exchange.exchangeType === filterType);
-}
-
 // let filteredData = exchanges;
-// const handleClick = () => {
-//   if (fromDate && toDate) {
-//    filteredData = filteredData.filter(exchange => {
-//        const date = new Date(exchange.dateTime);
-//        return date >= fromDate && date <= toDate;
-//    });
-//   }
+// if (fromDate && toDate) {
+//   filteredData = filteredData.filter(exchange => {
+//     const date = new Date(exchange.dateTime);
+//     return date >= fromDate && date <= toDate;
+//   });
+// }
 
-//   if (filterType) {
-//    filteredData = filteredData.filter(exchange => exchange.exchangeType === filterType);
-//   }
-//   }
+// if (filterType) {
+//   filteredData = filteredData.filter(exchange => exchange.exchangeType === filterType);
+// }
+
+const handleClick = () => {
+  setFilteredData(exchanges.filter((row) => {
+    // Convert the date string to a Date object
+    const rowDate = Date.parse(row.dateTime);
+    const fromDatestamp =  Date.parse(fromDate)
+    const toDatestamp =  Date.parse(toDate)
+    console.log(fromDate)
+    return (rowDate >= fromDatestamp) && (rowDate <= toDatestamp);
+     }));
+
+  // if (filterType) {
+  //  filteredData = filteredData.filter(exchange => exchange.exchangeType === filterType);
+  // }
+  }
 
   return (
     <div className={Style.table_container}>
@@ -109,11 +114,11 @@ if (filterType) {
             <div className={Style.table_box_group}>
               <Form.Group>
                 <Form.Label>From date</Form.Label>
-                <DatePicker selected={fromDate} onChange={setFromDate} className={Style.table_box_form_field} />
+                <DatePicker format="MM-dd-y" selected={fromDate} onChange={setFromDate} className={Style.table_box_form_field} />
               </Form.Group>
               <Form.Group>
                 <Form.Label>To date</Form.Label>
-                <DatePicker selected={toDate} onChange={setToDate} className={Style.table_box_form_field} />
+                <DatePicker format="MM-dd-y" selected={toDate} onChange={setToDate} className={Style.table_box_form_field} />
               </Form.Group>
               <Form.Control as="select" onChange={(e) => setFilterType(e.target.value)} className={Style.table_box_form_select}>
                 
@@ -125,7 +130,7 @@ if (filterType) {
               <div className={Style.toolbar_input_button}>
                 <Button
                   btnName="Filter"
-                  // onClick={handleClick}
+                  onClick={handleClick}
                   classStyle={Style.toolbar_input_btn_style}
                 />
               </div>

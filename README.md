@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Currency Exchange Widget - Frontend
+
+## Description
+
+<p>
+  This is the frontend component of a widget for displaying currency exchange rates and allowing users to exchange USD for Crypto. It is built with React and communicates with the back-end service built with NestJS via WebSockets.
+</p>
 
 ## Getting Started
+  <p>
+    These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+  </p>
 
-First, run the development server:
+  ### Prerequisites
+    
+   - Node.js and npm
+   - TypeScript
+   - JavaScript
+   - Reactjs
+   - CSS / React-boostrap
+   - Websocket.io
+   - MongoDB
+   - Docker
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+## Installation
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+  1. Clone the repository to your local machine
+      ```
+      git clone https://github.com/blcdevs/Frontend-assement
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+      ```
+  2. Install the project dependencies by running the following command in the project root folder:
+      ```
+        $ npm install
+      ```    
+  3. Change the base URL from /api/index to your base URL
+        const BASE_URL = 'http://localhost:3232';
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+ 6. Start the front-end service by running the following command in the project root folder:
+        ```
+        npm start
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+        ```
+7. The server should now be running on http://localhost:3232
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+# Clone the Backene
+    [Backedn](https://github.com/blcdevs/api) 
+  
+  8. Build the project's Docker image by running the following command in the project root folder:
+      ```
+      docker build -t currency-exchange-widget
+      ```
+ 9. Start the back-end service by running the following command in the project root folder:
+      ```
+        docker run -p 3232:3232 currency-exchange-widget
+      ``` 
 
-## Learn More
+  # Demo Link
+    [YouTube Link](youtube.com/blcd/exchange_task) 
+    [Site Link](youtube.com/blcd/exchange_task) 
+    
+# Built With
+   - Node.js and npm
+   - TypeScript
+   - JavaScript
+   - Reactjs
+   - CSS / React-boostrap
+   - Websocket.io
+   - MongoDB
+   - Docker
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+# License
+  <p>
+    This project is licensed under the MIT License - see the LICENSE.md file for details.
+</p>
