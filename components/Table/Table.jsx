@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Style from "./Table.module.css"
 import paginationFactory from "react-bootstrap-table2-paginator";
 import filterFactory, { textFilter, dateFilter } from 'react-bootstrap-table2-filter';
@@ -12,10 +12,16 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 const Table = ({exchanges, isSubmitted}) => {
-  const [filterType, setFilterType] = useState('');
+  const [filterType, setFilterType] = useState("all");
   const [fromDate, setFromDate] = useState(new Date());
   const [toDate, setToDate] = useState(new Date());
+  const [filteredData, setFilteredData] = useState(exchanges);
   const [currentPage, setCurrentPage] = useState(1);
+
+  useEffect(() => {
+setFilteredData(exchanges);
+}, [exchanges])
+
   // Update the current page when the user clicks on a page number
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -65,31 +71,25 @@ const Table = ({exchanges, isSubmitted}) => {
     },
   ];
 
-let filteredData = exchanges;
-if (fromDate && toDate) {
-  filteredData = filteredData.filter(exchange => {
-    const date = new Date(exchange.dateTime);
-    return date >= fromDate && date <= toDate;
-  });
-}
-
-if (filterType) {
-  filteredData = filteredData.filter(exchange => exchange.exchangeType === filterType);
-}
-
-// let filteredData = exchanges;
-// const handleClick = () => {
-//   if (fromDate && toDate) {
-//    filteredData = filteredData.filter(exchange => {
-//        const date = new Date(exchange.dateTime);
-//        return date >= fromDate && date <= toDate;
-//    });
-//   }
-
-//   if (filterType) {
-//    filteredData = filteredData.filter(exchange => exchange.exchangeType === filterType);
-//   }
-//   }
+  const handleClick = () => {
+      // Filter the data by date
+      const filteredByDate = exchanges.filter((row) => {
+        // Convert the date string to a Date object
+        const rowDate = Date.parse(row.dateTime);
+        const fromDatestamp = Date.parse(fromDate);
+        const toDatestamp = Date.parse(toDate);
+      return (rowDate >= fromDatestamp) && (rowDate <= toDatestamp);
+    });
+    
+      // Filter the data by type
+      let filteredByType;
+      if(filterType === 'all'){
+          filteredByType = filteredByDate
+      }else{
+          filteredByType = filteredByDate.filter(exchange => exchange.exchangeType === filterType);
+      }
+      setFilteredData(filteredByType);
+    }
 
   return (
     <div className={Style.table_container}>
@@ -109,25 +109,26 @@ if (filterType) {
             <div className={Style.table_box_group}>
               <Form.Group>
                 <Form.Label>From date</Form.Label>
-                <DatePicker selected={fromDate} onChange={setFromDate} className={Style.table_box_form_field} />
+                <DatePicker format="MM-dd-y" selected={fromDate} onChange={setFromDate} className={Style.table_box_form_field} />
               </Form.Group>
               <Form.Group>
                 <Form.Label>To date</Form.Label>
-                <DatePicker selected={toDate} onChange={setToDate} className={Style.table_box_form_field} />
+                <DatePicker format="MM-dd-y" selected={toDate} onChange={setToDate} className={Style.table_box_form_field} />
               </Form.Group>
               <Form.Control as="select" onChange={(e) => setFilterType(e.target.value)} className={Style.table_box_form_select}>
                 
-                <option value="">Select Type</option>
+                <option value="all">All</option>
                 <option value="live">Live Price</option>
                 <option value="exchange">Exchange</option>
               </Form.Control>
 
               <div className={Style.toolbar_input_button}>
-                <Button
-                  btnName="Filter"
-                  // onClick={handleClick}
-                  classStyle={Style.toolbar_input_btn_style}
-                />
+              <button
+                  type="button"
+                  onClick={handleClick}
+                  className={Style.toolbar_input_btn_style}
+                >Filter
+                </button>
               </div>
 
             </div>
