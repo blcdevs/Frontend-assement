@@ -41,7 +41,7 @@
         npm start
 
         ```
-7. The server should now be running on http://localhost:3232
+7. The frontend should now be running on http://localhost:3232
 
 # Clone the Backene
     [Backedn](https://github.com/blcdevs/api) 
