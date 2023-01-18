@@ -24,6 +24,9 @@
 
 ## Installation
 
+  <p>NOTE: You need to make sure your backend server is running on port 3232 else, you'd get error: TypeError: Failed to fetch. That's because it failed to fetch from the base URL.
+</p>
+
   1. Clone the repository to your local machine
       ```
       git clone https://github.com/blcdevs/Frontend-assement
@@ -42,7 +45,7 @@
         ```
 7. The frontend should now be running on http://localhost:3000
 
-## Using the docker image 
+## Using the docker image for the backend server
   8. Build the project's Docker image by running the following command in the project root folder:
       ```
       docker build -t exchange-widget-prod
