@@ -1,4 +1,4 @@
-const BASE_URL = 'http://ip172-18-0-90-cf3of9791rrg00ai3290-3232.direct.labs.play-with-docker.com';
+const BASE_URL = 'http://localhost:3232';
 export function getCurrencies () {
     return fetch(`${BASE_URL}/currencies`, {
         method: 'GET'

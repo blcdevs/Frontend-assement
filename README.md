@@ -38,26 +38,31 @@
 
  6. Start the front-end service by running the following command in the project root folder:
         ```
-        npm start
-
+        npm run dev
         ```
-7. The frontend should now be running on http://localhost:3232
+7. The frontend should now be running on http://localhost:3000
 
 # Clone the Backene
     [Backedn](https://github.com/blcdevs/api) 
   
   8. Build the project's Docker image by running the following command in the project root folder:
       ```
-      docker build -t currency-exchange-widget
+      docker build -t exchange-widget-prod
       ```
  9. Start the back-end service by running the following command in the project root folder:
       ```
-        docker run -p 3232:3232 currency-exchange-widget
+        docker run -p 3232:3232 exchange-widget-prod
       ``` 
+      ### Enter the link below for the api
+      ```
+      http://localhost:3232/exchanges
+      ```
+    <p>NOTE: you may get this error: TypeError: Cannot read properties of undefined (reading 'BTC'). That's because my api call to coinlayer.com has exceeded limit of 100 request. You can replace your api in the .env file</p>
 
   # Demo Link
-    [YouTube Link](youtube.com/blcd/exchange_task) 
-    [Site Link](youtube.com/blcd/exchange_task) 
+  <a href="http://www.youtube.com/watch?feature=player_embedded&v=hNILMSGcNxs" target="_blank">
+ <img src="http://img.youtube.com/vi/hNILMSGcNxs/mqdefault.jpg" alt="Watch the video" width="400" height="200" border="10" />
+  </a>
     
 # Built With
    - Node.js and npm
