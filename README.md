@@ -42,9 +42,7 @@
         ```
 7. The frontend should now be running on http://localhost:3000
 
-# Clone the Backene
-    [Backedn](https://github.com/blcdevs/api) 
-  
+## Using the docker image 
   8. Build the project's Docker image by running the following command in the project root folder:
       ```
       docker build -t exchange-widget-prod
